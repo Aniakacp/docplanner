@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docplanner</title>
+</head>
+<body>
+<form method="post">
+    <h1>Add appointment</h1>
+{% csrf_token %}
+Date: <input type="datetime-local" name="date" placeholder="YYYY-MM-DD HH:MM:SS" ><br>
+Clinic: <select name="clinic" id="clinic">
+         {% for adress in clinic %}
+         <option value='{{ adress.id }}'> {{adress}} </option>
+        {% endfor %}
+        </select><br>
+Doctor: <select name="doctor" id="doctor">
+         {% for dr in doctor %}
+         <option value='{{ dr.id }}'> {{dr}} </option>
+        {% endfor %}
+        </select><br>
+
+
+<br>
+    <input type="submit" value="Add appointment">
+<br>
+</form>
+<br><br>
+    {% if message %}
+    {{ message }}
+    {% endif %}
+
+</body>
+
+
+</html>

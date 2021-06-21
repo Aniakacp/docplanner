@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docplanner</title>
+</head>
+<body>
+<form method="post">
+    <h1>Doctors Login</h1>
+{% csrf_token %}
+{{ form.as_p }}
+    <input type="submit" value="Login">
+<br>
+</form>
+<br><br>
+    {% if message %}
+    {{ message }}
+    {% endif %}
+</body>
+
+<a href="/create-doctor/">Create doctor account</a>
+
+</html>

@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block content %}
+ <h3>User details:</h3>
+
+{% if user.is_authenticated %}
+    Name:   {{ user.first_name  }} {{ user.last_name }}<br>
+    Pesel:   {{ user.profil.pesel }}<br>
+    Phone:   {{ user.profil.phone }}<br>
+    Email:   {{ user.profil.user.email }}<br>
+{% endif %}
+<br>
+    <a href="/update-info/"> Update info </a><br>
+    <a href="/change-password/">Change password</a><br>
+    <a href="/main/"> Back </a>
+{% endblock %}

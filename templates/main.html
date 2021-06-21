@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sticky-footer/">
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Docplanner</title>
+  </head>
+
+<body>
+<div class="content">
+{% block content %}
+
+
+{% if user.is_authenticated %}
+    Hi {{ user }}
+    {% if appointments %}
+        <ul>
+    <h3>Your planned appointments:</h3>
+        {% for appointment in appointments %}
+       <li>Date: {{ appointment.date }}</li>
+        <li> Address: {{ appointment.address.street }} {{ appointment.address.number }} {{ appointment.address.city }} </li>
+         <li>Doctor: {{ appointment.doctor }}</li><br>
+            <input type="button" value="Edit appointment " onclick="location.href='/edit-appointment/{{ appointment.id }}/'">
+            <input type="button" value="Delete appointment " onclick="location.href='/delete-appointment/{{ appointment.id }}/'">
+
+        {% endfor %}
+        </ul>
+    {% endif %}
+
+
+{% if opinions %}
+    <ul>
+     <h3>Your opinions:</h3>
+    {% for opinion in opinions %}
+        <li> Doctor: {{ opinion.doctor }} </li>
+        <li> Opinion: {{ opinion.opinion }}</li>
+    {% endfor %}
+    </ul>
+        {% endif %}
+     <input type="button" value="Add appointment " onclick="location.href='/add-appointment/'">
+    <input type="button" value="Add opinion " onclick="location.href='/add-opinion/'"><br>
+
+ {% include 'buttons.html' %}
+    {% else %}
+    <a href="/">Login</a>
+{% endif %}
+    {% endblock %}
+</div>
+
+</body>
+</html>

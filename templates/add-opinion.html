@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Docplanner</title>
+</head>
+<body>
+<form method="post">
+    <h1>Add opinion</h1>
+{% csrf_token %}
+
+Doctor: <select name="doctor" id="doctor">
+         {% for dr in doctor %}
+         <option value='{{ dr.id }}'> {{dr}} </option>
+        {% endfor %}
+        </select><br>
+Opinion: <input type="textarea" name="opinion">
+
+<br>
+    <input type="submit" value="Add opinion">
+<br>
+</form>
+<br><br>
+    {% if message %}
+    {{ message }}
+    {% endif %}
+
+</body>
+
+
+</html>

@@ -1,0 +1,22 @@
+{% extends 'main.html' %}
+
+{% block content %}
+ <h3>User details:</h3>
+
+{% if user.is_authenticated %}
+
+<form method="post">
+{% csrf_token %}
+    Name:   {{ user.first_name  }} {{ user.last_name }}<br>
+    Pesel:   {{ user.profil.pesel }}<br>
+    Phone:   <input type="number" name='phone' placeholder={{ user.profil.phone }}><br>
+    Email:   <input type="text" name='email' placeholder={{ user.profil.user.email }}><br>
+
+<br>
+<input type="submit" value="Update">
+{% endif %}
+</form>
+<br>
+
+    <a href="/main/"> Back </a>
+{% endblock %}

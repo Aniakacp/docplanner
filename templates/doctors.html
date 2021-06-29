@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% block content %}
+
+
+{% if user.is_authenticated %}
+    {% if doctors %}
+         <h3>List of doctors:</h3>
+         <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Specialization</th>
+      <th scope="col">Doctors</th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for specialization in specializations %}
+    <tr>
+      <th scope="row">{{ id }}</th>
+      <td>{{ specialization}}</td>
+      <td>{{specialization.doctor_set}}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+    {% endif %}
+    <br>
+     <input type="button" value="Add appointment " onclick="location.href='/add-appointment/'">
+{% endif %}
+{% endblock %}

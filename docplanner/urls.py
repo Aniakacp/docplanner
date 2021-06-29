@@ -17,7 +17,6 @@ from django.contrib import admin
 from django.urls import path
 from project.views import *
 from accounts.views import *
-from doctor.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,13 +25,16 @@ urlpatterns = [
     path('create-profil/', CreateProfilView.as_view(), name='create-profil'),
     path('user-detail/', UserDetailView.as_view(), name='user-detail'),
     path('main/', MainPageView.as_view(), name='main'),
-    path('change-password/', ChangePasswordView.as_view(), name='change-password'),  #nie dziala
+    path('change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('update-info/', UpdateInfoView.as_view(), name='update-info'),
     path('add-appointment/', AddAppointmentView.as_view(), name='add-appointment'),
     path('add-opinion/', AddOpinionView.as_view(), name='add-opinion'),
     path('edit-appointment/<int:pk>/', EditAppointmentView.as_view(), name='edit-appointment'),
     path('delete-appointment/<int:pk>/', DeleteAppointmentView.as_view(), name='delete-appointment'),
-
-    path('doctor-login/', LoginDoctorView.as_view(), name='doctor-login'),  # jak tylko zmienic html???
+    path('edit-opinion/<int:pk>/', EditOpinionView.as_view(), name='edit-opinion'),
+    path('delete-opinion/<int:pk>/', DeleteOpinionView.as_view(), name='delete-opinion'),
+    path('opinions/', OpinionsView.as_view(), name='opinions'),
+    path('appointments/', AppointmentsCiew.as_view(), name='appointments'),
+    path('doctors/', DoctorsView.as_view(), name='doctors'),
     path('create-doctor/', CreateDoctorView.as_view(), name='create-doctor'),
 ]

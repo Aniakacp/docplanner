@@ -1,0 +1,32 @@
+{% extends 'main.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if opinions %}
+         <h3>Your opinions:</h3>
+         <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Doctor</th>
+      <th scope="col">Opinion</th>
+        <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+  {% for opinion in opinions %}
+    <tr>
+      <th scope="row">{{ id }}</th>
+      <td>{{ opinion.doctor }}</td>
+      <td> {{ opinion.opinion }}</td>
+      <td><input type="button" value="Edit opinion " onclick="location.href='/edit-opinion/{{ opinion.id }}/'">
+          <input type="button" value="Delete opinion " onclick="location.href='/delete-opinion/{{ opinion.id }}/'"></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+ {% endif %}
+    <input type="button" value="Add opinion " onclick="location.href='/add-opinion/'"><br>
+    {% endif %}
+{% endblock %}

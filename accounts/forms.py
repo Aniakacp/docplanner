@@ -44,3 +44,8 @@ class ResetPasswordForm(forms.ModelForm):
 
         if password1 != password2:
             raise forms.ValidationError('Passwords must be the same')
+
+class CreateDoctorForm(forms.ModelForm):
+    class Meta:
+        model = Doctor
+        exclude=['user']

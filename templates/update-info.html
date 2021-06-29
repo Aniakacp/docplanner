@@ -3,7 +3,6 @@
 {% block content %}
  <h3>User details:</h3>
 
-{% if user.is_authenticated %}
 
 <form method="post">
 {% csrf_token %}
@@ -14,7 +13,7 @@
 
 <br>
 <input type="submit" value="Update">
-{% endif %}
+
 </form>
 <br>
 

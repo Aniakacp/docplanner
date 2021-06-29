@@ -1,13 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Docplanner</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% block content %}
 <form method="post">
     <h1>Add appointment</h1>
 {% csrf_token %}
+
 Date: <input type="datetime-local" name="date" placeholder="YYYY-MM-DD HH:MM:SS" ><br>
 Clinic: <select name="clinic" id="clinic">
          {% for adress in clinic %}
@@ -20,7 +16,6 @@ Doctor: <select name="doctor" id="doctor">
         {% endfor %}
         </select><br>
 
-
 <br>
     <input type="submit" value="Add appointment">
 <br>
@@ -29,8 +24,4 @@ Doctor: <select name="doctor" id="doctor">
     {% if message %}
     {{ message }}
     {% endif %}
-
-</body>
-
-
-</html>
+{% endblock %}

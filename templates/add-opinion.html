@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Docplanner</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% block content %}
 <form method="post">
     <h1>Add opinion</h1>
 {% csrf_token %}
@@ -25,7 +20,4 @@ Opinion: <input type="textarea" name="opinion">
     {{ message }}
     {% endif %}
 
-</body>
-
-
-</html>
+{% endblock %}

@@ -8,8 +8,9 @@
 <form method="post">
     {% csrf_token %}
     {{form.as_p}}
-
-    <input type="submit" value="Delete appointment">
+    Are you sure you want to delete the appointment?
+    <input type="submit" value="Yes">
+    <input type="button" value="No" onclick="location.href='/appointments/'">
 </form>
 </body>
 </html>

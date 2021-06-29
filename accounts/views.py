@@ -23,7 +23,6 @@ class LoginView(View):
             return redirect('main')
         return render(request, 'login.html', {'form': form})
 
-
 class LogoutView(View):
     def get(self, request):
         logout(request)
@@ -45,7 +44,7 @@ class CreateProfilView(CreateView):
             profile = profil_form.save(commit=False)
             profile.user=user
             profile.save()
-            return redirect('main')
+            return redirect('login')
         return render(request, 'profil.html', {'user_form': user_form, 'profil_form':profil_form})
 
 
@@ -61,3 +60,22 @@ class ChangePasswordView(View):
             user.save()
             return redirect('login')
         return render(request, 'change-password.html', {'form': form})
+
+class CreateDoctorView(CreateView):
+    def get(self, request):
+        user_form = CreateUserForm()
+        profil_form = CreateDoctorForm()
+        return render(request, 'profil.html', {'user_form': user_form, 'profil_form':profil_form})
+
+    def post(self, request):
+        user_form = CreateUserForm(request.POST)
+        profil_form =CreateDoctorForm(request.POST)
+        if user_form.is_valid() and profil_form.is_valid():
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password1'])
+            user.save()
+            profile = profil_form.save(commit=False)
+            profile.user=user
+            profile.save()
+            return redirect('login')
+        return render(request, 'profil.html', {'user_form': user_form, 'profil_form':profil_form})

@@ -5,6 +5,7 @@ from accounts.forms import *
 from project.models import *
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
+from project.permission_mixin import MyTestUserPassesTest
 
 class LoginView(View):
     def get(self, request):
@@ -23,7 +24,7 @@ class LoginView(View):
             return redirect('main')
         return render(request, 'login.html', {'form': form})
 
-class LogoutView(View):
+class LogoutView(MyTestUserPassesTest, View):
     def get(self, request):
         logout(request)
         return redirect('login')
@@ -48,7 +49,7 @@ class CreateProfilView(CreateView):
         return render(request, 'profil.html', {'user_form': user_form, 'profil_form':profil_form})
 
 
-class ChangePasswordView(View):
+class ChangePasswordView(MyTestUserPassesTest, View):
     def get(self, request):
         form = ResetPasswordForm()
         return render(request, 'change-password.html', {'form': form})
@@ -77,5 +78,6 @@ class CreateDoctorView(CreateView):
             profile = profil_form.save(commit=False)
             profile.user=user
             profile.save()
+            profil_form.save_m2m()   #commit=False bo jest relacja many to many
             return redirect('login')
         return render(request, 'profil.html', {'user_form': user_form, 'profil_form':profil_form})

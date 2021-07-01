@@ -11,60 +11,88 @@
     <title>Docplanner</title>
   </head>
 <style>
-    .footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 60px;
-      line-height: 60px;
-      background-color: #f5f5f5;
+    .navbar{
+        font-size:20px;
     }
-  </style>
+    .topnav {
+  background-color: #333;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+</style>
 <body>
 <div class="content">
 
-    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="/main/">Home <span class="sr-only"></span></a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav">
-      <a class="nav-item nav-link active" href="/appointments/"> Appointments </a>
-      <a class="nav-item nav-link" href="/opinions/">Opinions</a>
-        <a class="nav-item nav-link" href="/doctors/">Doctors</a>
-    </div>
-  </div>
-</nav>
-{% block content %}
+{%  load static %}
 
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="navbar-collapse collapse w-100 dual-collapse2 order-1 order-md-0">
+        <ul class="nav navbar-nav navbar-left">
+            <li class="nav-item active"><a class="nav-link" href="/main/">Appointments</a></li>
+            <li class="nav-item"><a class="nav-link" href="/opinions/">Opinions</a></li>
+        </ul>
+    <div class="mx-auto my-2 order-0 order-md-1 position-relative">
+            <a class="navbar-brand" href="/main/"><img src="{% static 'symbol.jpg' %}" height="100px"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".dual-collapse2">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+    </div>
+    </div>
+
+    <div class="navbar-collapse collapse w-100% dual-collapse2 order-2 order-md-2">
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item"><a class="nav-link" href="/user-detail/">Personal details</a></li>
+            <li class="nav-item"><a class="nav-link" href="/logout/">Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+{% block content %}
 {% if user.is_authenticated %}
     {% if appointments %}
-        <ul>
-    <h3>Your planned appointments:</h3>
+    <ul>
         {% for appointment in appointments %}
-       <li>Date: {{ appointment.date }}</li>
-        <li> Address: {{ appointment.address.street }} {{ appointment.address.number }} {{ appointment.address.city }} </li>
-         <li>Doctor: {{ appointment.doctor }}</li><br>
-            <input type="button" value="Edit appointment " onclick="location.href='/edit-appointment/{{ appointment.id }}/'">
-            <input type="button" value="Delete appointment " onclick="location.href='/delete-appointment/{{ appointment.id }}/'">
+           <div class="container p-3 my-3 border">
+           <table class="table table-borderless">
+               <tr>
+               <td style="width:150px">{{ appointment.date }}</td>
+               <td style="width:250px">{{ appointment.doctor }}</td>
+               <td style="width:100px"><input type="button" value="Edit appointment" onclick="location.href='/edit-appointment/{{ appointment.id }}/'"></td>
+               </tr>
 
+               <tr>
+               <td style="width:150px"></td>
+               <td style="width:250px">{{ appointment.address.street }} {{ appointment.address.number }} {{ appointment.address.city }} </td>
+               <td style="width:100px"><input type="button" value="Delete appointment" onclick="location.href='/delete-appointment/{{ appointment.id }}/'"></td>
+               </tr>
+
+           </table>
+           </div>
         {% endfor %}
-        </ul>
+    </ul>
     {% endif %}
 
 
 
 
 
-
- {% include 'buttons.html' %}
-    {% else %}
-    <a href="/">Login</a>
+    <button class="btn btn-lg btn-primary btn-block;" style="margin-left:auto;margin-right:auto;display:block" type="button" onclick="location.href='/add-appointment/'">Add appointment</button>
 {% endif %}
-    {% endblock %}
+{% endblock %}
+
+<nav class="topnav align-bottom navbar-expand-md navbar-dark bg-dark text-cente">
+    <div class="footer text-center py-3 bg-dark">
+        <div >
+            <ul>
+                <li><a class="navbar-brand mx-auto" href="/doctors/">Doctors</a></li>
+                <li><a class="navbar-brand mx-auto" href="/clinics/">Clinic adressess</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 </div>
-
-
 </body>
 </html>

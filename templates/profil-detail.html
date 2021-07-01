@@ -1,16 +1,22 @@
 {% extends 'main.html' %}
 
 {% block content %}
- <h3>User details:</h3>
+
 
 {% if user.is_authenticated %}
-    Name:   {{ user.first_name  }} {{ user.last_name }}<br>
-    Pesel:   {{ user.profil.pesel }}<br>
-    Phone:   {{ user.profil.phone }}<br>
-    Email:   {{ user.profil.user.email }}<br>
+    <div class="container p-3 my-3 border">
+    <h3>User details:</h3>
+    <table>
+    <tr><th>Name</th><td>{{ user.first_name  }} {{ user.last_name }}</td></tr>
+    <tr><th>Pesel</th><td>{{ user.profil.pesel }}</td></tr>
+    <tr><th>Phone</th><td>{{ user.profil.phone }}</td></tr>
+    <tr><th>Email</th><td>{{ user.profil.user.email }}</td></tr>
+    </table>
+    </div>
 {% endif %}
 <br>
+    <div class="container p-3 my-3 border">
     <a href="/update-info/"> Update info </a><br>
     <a href="/change-password/">Change password</a><br>
-    <a href="/main/"> Back </a>
+    </div>
 {% endblock %}

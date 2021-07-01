@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+{% block content %}
+
+{% if user.is_authenticated %}
+{% if clinics %}
+
+<ul>
+  {% for clinic in clinics %}
+
+<li>{{ clinic.street }} {{ clinic.number }}  {{ clinic.city }}</li>
+
+  {% endfor %}
+</ul>
+ {% endif %}
+    {% endif %}
+{% endblock %}

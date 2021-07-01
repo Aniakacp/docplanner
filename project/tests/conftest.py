@@ -1,15 +1,18 @@
+import datetime
+
 import pytest
 from django.contrib.auth.models import User
 from project.models import *
 from faker import Faker
 import pytz
 faker = Faker("pl_PL")
-from docplanner.settings import TIME_ZONE
+#from docplanner.settings import TIME_ZONE
 
 @pytest.fixture
 def user():
     u=User()
     u.username ='aniakacp'
+    u.set_password('123')
     u.save()
     return u
 
@@ -37,13 +40,21 @@ def profil(user):
     return p
 
 @pytest.fixture
-def doctor(user2):
-    doctor = Doctor.objects.create(user=user2)
+def specializations(user):
+    s1 = Specialization.objects.create(name='ortopeda', description='lekarz ortopeda')
+    s2 = Specialization.objects.create(name='ortopeda', description='lekarz ortopeda')
+    return [s1, s2]
+
+@pytest.fixture
+def doctor(user2, specializations):
+    doctor = Doctor.objects.create(user=user2, title='dr')
+    doctor.specialization.set(specializations)
     return doctor
 
 @pytest.fixture
-def patient(user):
-    doctor = Profil.objects.create(user=user)
+def doctor2(user3, specializations):
+    doctor = Doctor.objects.create(user=user3, title='dr mgr')
+    doctor.specialization.set(specializations)
     return doctor
 
 @pytest.fixture
@@ -54,34 +65,47 @@ def address():
     a =Clinic.objects.create(city=city, street=street, number=number)
     return a
 
-@pytest.fixture  #bo jest lista wybierana na stronie
-def appointment(patient, doctor, address):
-    date=faker.date_time(tzinfo=pytz.timezone(TIME_ZONE))
-    a= Appointment.objects.create(date=date, patient=patient, doctor=doctor, address=address)
-    return a
-
 @pytest.fixture
-def opinion(patient, doctor):
-    patient = Profil.objects.create(user=user)
+def opinion(profil, doctor):
     doctor = Doctor.objects.create(user= user2)
     opinion ="Cool doctor"
-    p =Opinions.objects.create(doctor=doctor, patient=patient, opinion=opinion)
+    p =Opinions.objects.create(doctor=doctor, patient=profil, opinion=opinion)
     return p
 
 @pytest.fixture
-def opinions(patient, doctor):
+def opinions(profil, doctor):
     opinion1 = "First opinion"
     opinion2 = "Second opinion"
-    opinion1= Opinions.objects.create(doctor=doctor, patient=patient, opinion=opinion1)
-    opinion2= Opinions.objects.create(doctor=doctor, patient=patient, opinion=opinion2)
+    opinion1= Opinions.objects.create(doctor=doctor, patient=profil, opinion=opinion1)
+    opinion2= Opinions.objects.create(doctor=doctor, patient=profil, opinion=opinion2)
     list=[opinion1, opinion2]
     return list
 
 @pytest.fixture
-def appointments(patient, doctor, address):
-    date1 = faker.date_time(tzinfo=pytz.timezone(TIME_ZONE))
-    date2 = faker.date_time(tzinfo=pytz.timezone(TIME_ZONE))
-    appointment1= Appointment.objects.create(date=date1, patient=patient, doctor=doctor, address=address)
-    appointment2= Appointment.objects.create(date=date2, patient=patient, doctor=doctor, address=address)
-    list=[appointment1, appointment2]
+def clinics():
+    clinic1= Clinic.objects.create(city='Warsaw', street="first", number='12')
+    clinic2= Clinic.objects.create(city='Warsaw', street="second", number='15')
+    list=[clinic1, clinic2]
+    return list
+
+@pytest.fixture
+def doctors(doctor, doctor2):
+    list=[doctor, doctor2]
+    return list
+
+@pytest.fixture
+def appointment(profil, doctor, address):
+    date1 = datetime.datetime.now() + datetime.timedelta(days=1)
+    a= Appointment.objects.create(date=date1, patient=profil, doctor=doctor, address=address)
+    return a
+
+@pytest.fixture
+def appointment2(profil, doctor, address):
+    date1 = datetime.datetime.now() + datetime.timedelta(days=2)
+    a= Appointment.objects.create(date=date1, patient=profil, doctor=doctor, address=address)
+    return a
+
+@pytest.fixture
+def appointments(profil, doctor, address, appointment, appointment2):
+    list=[appointment, appointment2]
     return list

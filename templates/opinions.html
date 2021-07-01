@@ -3,30 +3,23 @@
 
 {% if user.is_authenticated %}
 {% if opinions %}
-         <h3>Your opinions:</h3>
-         <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Doctor</th>
-      <th scope="col">Opinion</th>
-        <th></th>
-    </tr>
-  </thead>
 
-  <tbody>
+  <h3>Opinions</h3>
   {% for opinion in opinions %}
-    <tr>
-      <th scope="row">{{ id }}</th>
-      <td>{{ opinion.doctor }}</td>
-      <td> {{ opinion.opinion }}</td>
-      <td><input type="button" value="Edit opinion " onclick="location.href='/edit-opinion/{{ opinion.id }}/'">
-          <input type="button" value="Delete opinion " onclick="location.href='/delete-opinion/{{ opinion.id }}/'"></td>
-    </tr>
+      <div class="container p-3 my-3 border">
+        <table>
+            <tr><th>{{ opinion.doctor }}</th></tr>
+            <tr><td>{{ opinion.opinion }}</td></tr>
+
+        </table>
+      </div>
   {% endfor %}
-  </tbody>
-</table>
- {% endif %}
-    <input type="button" value="Add opinion " onclick="location.href='/add-opinion/'"><br>
+
+
+
+
+{% endif %}
+     <button class="btn btn-lg btn-primary btn-block;" style="margin-left:auto;margin-right:auto;display:block" type="button" onclick="location.href='/add-opinion/'">Add opinion</button>
+
     {% endif %}
 {% endblock %}

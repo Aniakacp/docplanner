@@ -5,19 +5,10 @@
 {% if user.is_authenticated %}
     {% if appointments %}
          <h3>Your planned appointments:</h3>
-         <table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Date</th>
-      <th scope="col">Address</th>
-      <th scope="col">Doctor</th>
-        <th></th>
-    </tr>
-  </thead>
 
   <tbody>
   {% for appointment in appointments %}
+      <div class="container p-3 my-3 border">
     <tr>
       <th scope="row">{{ id }}</th>
       <td>{{ appointment.date }}</td>
@@ -26,6 +17,7 @@
       <td><input type="button" value="Change appointment " onclick="location.href='/edit-appointment/{{ appointment.id }}/'">
           <input type="button" value="Cancle appointment " onclick="location.href='/delete-appointment/{{ appointment.id }}/'"></td>
     </tr>
+      </div>
   {% endfor %}
   </tbody>
 </table>

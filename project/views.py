@@ -1,25 +1,26 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from project.permission_mixin import MyTestUserPassesTest
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from project.models import *
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+import dateutil.parser
 
-class MainPageView(View):
+class MainPageView(MyTestUserPassesTest, View):
     def get(self, request):
-        appointments = Appointment.objects.filter(patient=Profil.objects.get(user=request.user))
+        appointments= Appointment.objects.filter(patient= request.user.profil, date__gte=datetime.now())
         opinions = Opinions.objects.filter(patient=Profil.objects.get(user=request.user))
         username=''
         if request.user.is_authenticated:
             username = request.user.username
         return render(request, 'main.html', {'appointments':appointments, 'opinions':opinions, 'username':username})
 
-class UserDetailView(View):
+class UserDetailView(MyTestUserPassesTest, View):
     def get(self, request):
         return render(request, 'profil-detail.html' )
 
-class UpdateInfoView(UpdateView):
+class UpdateInfoView(MyTestUserPassesTest, UpdateView):
     def get(self, request):
         return render(request, 'update-info.html')
     def post(self, request):
@@ -36,7 +37,7 @@ class UpdateInfoView(UpdateView):
         return render(request, 'update-info.html')
 
 
-class AddAppointmentView(View):
+class AddAppointmentView(MyTestUserPassesTest, View):
     def get(self, request):
         doctor= Doctor.objects.all()
         clinic= Clinic.objects.all()
@@ -51,13 +52,14 @@ class AddAppointmentView(View):
             return redirect('appointments')
         return render(request, 'add-appointment.html')
 
-class OpinionsView(View):
+class OpinionsView(MyTestUserPassesTest, View):
     def get(self, request):
+        doctors= Doctor.objects.all()
         opinions = Opinions.objects.filter(patient=Profil.objects.get(user=request.user))
-        return render(request, 'opinions.html', {'opinions':opinions })
+        return render(request, 'opinions.html', {'opinions':opinions, 'doctors': doctors })
 
 
-class AddOpinionView(View):
+class AddOpinionView(MyTestUserPassesTest, View):
     def get(self, request):
         doctor= Doctor.objects.all()
         return render(request, 'add-opinion.html', {'doctor':doctor })
@@ -76,31 +78,34 @@ class EditAppointmentView(MyTestUserPassesTest, UpdateView):
     success_url = reverse_lazy('appointments')
     fields=['doctor', 'date', 'address']
 
-class DeleteAppointmentView(DeleteView):
+class DeleteAppointmentView(MyTestUserPassesTest, DeleteView):
     model = Appointment
     template_name = 'delete-appointment.html'
     success_url = reverse_lazy('appointments')
 
-class AppointmentsCiew(View):
-    def get(self, request):
-        appointments = Appointment.objects.filter(patient=Profil.objects.get(user=request.user))
-        return render(request, 'appointments.html', {'appointments':appointments })
+#class AppointmentsView(MyTestUserPassesTest, View):
+#    def get(self, request):
+#        appointments= Appointment.objects.filter(patient= request.user.profil, date__gte=datetime.now())
+#        return render(request, 'appointments.html', {'appointments':appointments })
 
+#class EditOpinionView(MyTestUserPassesTest, UpdateView):
+ #   model = Opinions
+#    template_name ='edit-opinion.html'
+ #   success_url = reverse_lazy('opinions')
+ #   fields=['doctor', 'opinion']
 
-class EditOpinionView(MyTestUserPassesTest, UpdateView):
-    model = Opinions
-    template_name ='edit-opinion.html'
-    success_url = reverse_lazy('opinions')
-    fields=['doctor', 'opinion']
-
-class DeleteOpinionView(DeleteView):
-    model = Opinions
-    template_name = 'delete-opinion.html'
-    success_url = reverse_lazy('opinions')
-
+#class DeleteOpinionView(DeleteView):
+#    model = Opinions
+ #   template_name = 'delete-opinion.html'
+ #   success_url = reverse_lazy('opinions')
 
 class DoctorsView(View):
     def get(self, request):
         specializations = Specialization.objects.all()
         doctors= Doctor.objects.all()
         return render(request, 'doctors.html', {'doctors': doctors, 'specializations':specializations })
+
+class ClinicsView(View):
+    def get(self, request):
+        clinics = Clinic.objects.all()
+        return render(request, 'clinics.html', {'clinics': clinics})

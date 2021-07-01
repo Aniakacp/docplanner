@@ -17,16 +17,21 @@
   <tbody>
   {% for specialization in specializations %}
     <tr>
-      <th scope="row">{{ id }}</th>
-      <td>{{ specialization}}</td>
-      <td>{{specialization.doctor_set}}</td>
+      <th scope="row">{{ specialization.pk }} </th>
+        <td>{{ specialization }}</td>
+      <td>
+      <ul>
+        {%  for doctor in specialization.doctor_set.all %}
+        <li>{{doctor}}</li>
+        {% endfor %}
+      </ul>
+      </td>
     </tr>
+
   {% endfor %}
   </tbody>
 </table>
 
     {% endif %}
-    <br>
-     <input type="button" value="Add appointment " onclick="location.href='/add-appointment/'">
 {% endif %}
 {% endblock %}

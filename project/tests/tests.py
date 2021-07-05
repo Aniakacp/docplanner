@@ -33,8 +33,10 @@ def test_create_profil_redirect():
 @pytest.mark.django_db
 def test_create_doctor_redirect(specializations):
     c = Client()
-    new_user= {'username': 'new_user', 'password1':'123', 'password2': '123', 'first_name':'Anna', 'last_name':'Bochenek', 'email':'ania.maria.bochenek@gmail.com', 'title':'ortopeda', 'specialization':specializations}
-    response = c.post("/create-profil/", new_user)
+    new_user= {'username': 'new_user', 'password1':'123', 'password2': '123', 'first_name':'Anna',
+               'last_name':'Bochenek', 'email':'ania.maria.bochenek@gmail.com', 'title':'ortopeda',
+               'specialization':[x.id for x in specializations]}
+    response = c.post("/create-doctor/", new_user)
     assert response.status_code == 302
     assert response.url.startswith(reverse('login'))
 
@@ -108,10 +110,11 @@ def test_add_appointment_redirect(profil, doctor, address):
     c = Client()
     c.force_login(profil.user)
     all_before = Appointment.objects.count()
-    data= {'patient': profil, 'doctor': doctor, 'address': address, 'date': datetime.datetime.now()+datetime.timedelta(days=1)}
+    date = (datetime.datetime.now()+datetime.timedelta(days=1)).strftime('%Y-%m-%d %H:%M')
+    data= {'patient': profil.id, 'doctor': doctor.id, 'clinic': address.id, 'date': date}
     response = c.post("/add-appointment/", data)
     assert response.status_code ==302
-    assert response.url.startswith(reverse('appointments'))
+    assert response.url.startswith(reverse('main'))
     assert Appointment.objects.count() == all_before + 1
 
 @pytest.mark.django_db
@@ -144,14 +147,6 @@ def test_delete_appointment(user, appointment):
     assert response.status_code ==200
 
 @pytest.mark.django_db
-def test_delete_appointment_redirect(profil, appointment):
-    c = Client()
-    c.force_login(profil.user)
-    response = c.post(reverse("delete-appointment", args=(appointment.id, )))
-    assert response.status_code ==302
-    assert Appointment.objects.count() == 0
-
-@pytest.mark.django_db
 def test_get_all_opinions(user, opinions):
     c = Client()
     c.force_login(user)
@@ -163,9 +158,9 @@ def test_get_all_opinions(user, opinions):
         assert item in opinions
 
 @pytest.mark.django_db
-def test_get_all_appointments(user, appointments):
+def test_get_all_appointments(profil, appointments):
     c = Client()
-    c.force_login(user)
+    c.force_login(profil.user)
     response = c.get(reverse("main"))
     assert response.status_code ==200
     assert len(response.context['appointments']) == len(appointments)  #widok przekazuje do szablonu 'appointments'
@@ -174,9 +169,9 @@ def test_get_all_appointments(user, appointments):
         assert item in appointments
 
 @pytest.mark.django_db
-def test_get_all_clinics(user, clinics):
+def test_get_all_clinics(profil, clinics):
     c = Client()
-    c.force_login(user)
+    c.force_login(profil.user)
     response = c.get(reverse("clinics"))
     assert response.status_code ==200
     assert len(response.context['clinics']) == len(clinics)
@@ -185,12 +180,40 @@ def test_get_all_clinics(user, clinics):
         assert item in clinics
 
 @pytest.mark.django_db
-def test_get_all_doctors(user, doctors):
+def test_get_all_doctors(profil, doctors):
     c = Client()
-    c.force_login(user)
+    c.force_login(profil.user)
     response = c.get(reverse("doctors"))
     assert response.status_code ==200
     assert len(response.context['doctors']) == len(doctors)
     assert len(response.context['doctors']) == Doctor.objects.count()
     for item in response.context['doctors']:
         assert item in doctors
+
+@pytest.mark.django_db
+def test_get_all_doctors_not_loged(user):
+    c= Client()
+    response= c.get(reverse("doctors"))
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('login'))
+
+@pytest.mark.django_db
+def test_get_all_clinics_not_loged(user):
+    c= Client()
+    response= c.get(reverse("clinics"))
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('login'))
+
+@pytest.mark.django_db
+def test_get_all_appointments_not_loged(user):
+    c= Client()
+    response= c.get(reverse("main"))
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('login'))
+
+@pytest.mark.django_db
+def test_get_all_opinions_not_loged(user):
+    c= Client()
+    response= c.get(reverse("opinions"))
+    assert response.status_code == 302
+    assert response.url.startswith(reverse('login'))

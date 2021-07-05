@@ -49,7 +49,7 @@ class AddAppointmentView(MyTestUserPassesTest, View):
         patient= Profil.objects.get(user=request.user)
         if date!='':
             Appointment.objects.create(patient=patient, doctor=doctor, address=clinic, date=date)
-            return redirect('appointments')
+            return redirect('main')
         return render(request, 'add-appointment.html')
 
 class OpinionsView(MyTestUserPassesTest, View):
@@ -99,13 +99,13 @@ class DeleteAppointmentView(MyTestUserPassesTest, DeleteView):
  #   template_name = 'delete-opinion.html'
  #   success_url = reverse_lazy('opinions')
 
-class DoctorsView(View):
+class DoctorsView(MyTestUserPassesTest, View):
     def get(self, request):
         specializations = Specialization.objects.all()
         doctors= Doctor.objects.all()
         return render(request, 'doctors.html', {'doctors': doctors, 'specializations':specializations })
 
-class ClinicsView(View):
+class ClinicsView(MyTestUserPassesTest, View):
     def get(self, request):
         clinics = Clinic.objects.all()
         return render(request, 'clinics.html', {'clinics': clinics})

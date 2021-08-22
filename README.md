@@ -17,7 +17,8 @@ Project is created with:
 
 ## Scope of functionalities
 * create new patient profile
-* log on to the booking platform (only logged on patients have access)
+* log on to the booking platform (only logged on patients have access)\
+<img src="./images_readme/login.png" raw=true>
 * add appointment
 * view all scheduled appointments of logged patient
 * personal details can be viewed and updated

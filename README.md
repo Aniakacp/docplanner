@@ -17,11 +17,14 @@ Project is created with:
 
 ## Scope of functionalities
 * create new patient profile
-* log on to the booking platform (only logged on patients have access)\
+<img src="./images_readme/create-user.png" raw=true>
+* log on (and log out) the booking platform (only logged on patients have access)
 <img src="./images_readme/login.png" raw=true>
 * add appointment
+<img src="./images_readme/add_appointment.png" raw=true>
 * view all scheduled appointments of logged patient
 * personal details can be viewed and updated
+<img src="./images_readme/user-details.png" raw=true>
 * patient can add an opinion about a specific doctor
 * all available doctors are listed
 * all available clinic locations are listed
